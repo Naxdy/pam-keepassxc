@@ -1,0 +1,24 @@
+[package]
+name = "pam-keepassxc"
+version = "1.0.0"
+edition = "2024"
+
+[lib]
+name = "pam_keepassxc"
+crate-type = ["cdylib"]
+
+[lints.clippy]
+pedantic = { level = "warn", priority = 0 }
+nursery = { level = "warn", priority = 0 }
+unwrap_used = { level = "warn", priority = 0 }
+cognitive_complexity = { level = "allow", priority = 1 }
+
+[dependencies]
+eyre = "0.6.12"
+pamsm = { version = "0.5.5", features = ["libpam"] }
+tracing = { version = "0.1.44", features = [
+  "max_level_trace",
+  "release_max_level_info",
+] }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+zbus = { version = "5.14.0" }
