@@ -17,7 +17,6 @@ in
   # toml
   programs.taplo.enable = true;
 
-  # markdown, yaml, etc.
   programs.prettier = {
     enable = true;
     settings = {
@@ -25,6 +24,7 @@ in
       semi = true;
       printWidth = 120;
       singleQuote = true;
+      proseWrap = "always";
     };
   };
 
