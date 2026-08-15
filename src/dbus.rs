@@ -38,6 +38,16 @@ impl KeePassXcInterface<'_> {
         self.proxy.open_database(path, password)
     }
 
+    pub fn unlock_database_with_keyfile(
+        &self,
+        path: &str,
+        keyfile: &str,
+        password: &str,
+    ) -> zbus::Result<()> {
+        self.proxy
+            .open_database_with_keyfile(path, password, keyfile)
+    }
+
     pub fn lock_all_databases(&self) -> zbus::Result<()> {
         self.proxy.lock_all_databases()
     }

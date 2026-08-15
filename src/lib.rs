@@ -6,7 +6,7 @@ mod log;
 
 use eyre::Context;
 use pamsm::{PamError, PamLibExt, PamServiceModule, pam_module};
-use tracing::{error, info};
+use tracing::{error, info, warn};
 use tracing_subscriber::util::SubscriberInitExt;
 
 use crate::{dbus::KeePassXcInterface, log::pam_dispatch};
@@ -92,11 +92,29 @@ fn try_unlock_databases<'a>(
     let interface = KeePassXcInterface::new().wrap_err("failed to initialize dbus interface")?;
 
     for db in paths {
-        interface
-            .unlock_database(db, password)
-            .wrap_err_with(|| format!("failed to unlock database {db}"))?;
+        let mut db = db.split(':');
 
-        info!("dispatched unlock request for {db}");
+        match (db.next(), db.next()) {
+            (Some(db), Some(keyfile)) => {
+                interface
+                    .unlock_database_with_keyfile(db, keyfile, password)
+                    .wrap_err_with(|| {
+                        format!("failed to unlock database {db} with keyfile {keyfile}")
+                    })?;
+
+                info!("dispatched unlock request for {db} with keyfile {keyfile}");
+            }
+            (Some(db), None) => {
+                interface
+                    .unlock_database(db, password)
+                    .wrap_err_with(|| format!("failed to unlock database {db}"))?;
+
+                info!("dispatched unlock request for {db}");
+            }
+            _ => {
+                warn!("no path was provided");
+            }
+        }
     }
 
     Ok(())

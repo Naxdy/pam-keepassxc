@@ -19,6 +19,7 @@ in
       default = [ ];
       example = [
         "/home/alice/passwords.kbdx"
+        "/home/alice/passwords_with_keyfile.kbdx:/home/alice/keyfile.keyx"
       ];
     };
 

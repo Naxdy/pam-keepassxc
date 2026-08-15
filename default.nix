@@ -10,6 +10,7 @@ let
     "rustc"
     "rustfmt"
     "rust-std"
+    "rust-src"
     "rust-analyzer"
     "clippy"
   ];
